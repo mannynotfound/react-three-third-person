@@ -1,0 +1,40 @@
+{
+  "name": "example",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@react-three/cannon": "^6.3.0",
+    "@react-three/drei": "^8.7.3",
+    "@react-three/fiber": "^7.0.26",
+    "manny": "^3.0.0",
+    "react-three-third-person": "file:../",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-scripts": "5.0.1",
+    "three": "^0.137.4",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
