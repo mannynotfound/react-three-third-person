@@ -69,6 +69,7 @@ function ThirdPersonCharacter() {
 | characterProps  | object         | {}        | configuration object for character |
 | characterObj   | THREE.Object3D | undefined | three.js object for character model               |
 | animationPaths | object         | {}        | object for animation clip configuration           |
+| onLoad | function         | () => {}        | called when animation clips are done loading           |
 
 #### cameraOptions
 
