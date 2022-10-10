@@ -1,6 +1,6 @@
 {
   "name": "react-three-third-person",
-  "version": "0.4.04",
+  "version": "0.4.05",
   "description": "package for adding third person controls in @react-three/fiber.",
   "main": "./lib/index.js",
   "scripts": {

@@ -1,5 +1,5 @@
-import * as THREE from "three";
-import { useState, useEffect } from "react";
+import * as THREE from 'three';
+import { useState, useEffect } from 'react';
 
 /*
  * Based on code written by knav.eth for chainspace (https://somnet.chainrunners.xyz/chainspace)
@@ -71,21 +71,22 @@ class ThirdPersonCameraControls {
     this.domElement = domElement;
 
     this.input = {};
-    const k = "camera";
-    inputManager.subscribe("wheel", k, this.handleMouseWheel.bind(this));
+    const k = 'camera';
+    inputManager.subscribe('wheel', k, this.handleMouseWheel.bind(this));
     inputManager.subscribe(
-      "pointerlockchange",
+      'pointerlockchange',
       k,
       this.onPointerLockChange.bind(this)
     );
-    inputManager.subscribe("pointerdown", k, this.onPointerDown.bind(this));
-    inputManager.subscribe("pointerup", k, this.onPointerUp.bind(this));
-    inputManager.subscribe("pointermove", k, this.onPointerMove.bind(this));
-    inputManager.subscribe("pointercancel", k, this.onPointerCancel.bind(this));
-    inputManager.subscribe("pointerlockerror", k, (e) =>
-      console.error("POINTERLOCK ERROR ", e)
+    inputManager.subscribe('pointerdown', k, this.onPointerDown.bind(this));
+    inputManager.subscribe('pointerup', k, this.onPointerUp.bind(this));
+    inputManager.subscribe('pointermove', k, this.onPointerMove.bind(this));
+    inputManager.subscribe('pointercancel', k, this.onPointerCancel.bind(this));
+    inputManager.subscribe('pointerlockerror', k, (e) =>
+      console.error('POINTERLOCK ERROR ', e)
     );
-    inputManager.subscribe("contextmenu", k, this.onContextMenu.bind(this));
+    inputManager.subscribe('contextmenu', k, this.onContextMenu.bind(this));
+    this.cameraCollisionOn = options?.cameraCollisionOn;
     this.targetOffset.y = options?.yOffset ?? 1.6;
     this.outerCameraContainer.position.copy(this.targetOffset);
     this.outerCameraContainer.add(this.cameraContainer);
@@ -104,7 +105,7 @@ class ThirdPersonCameraControls {
       this.spherical.theta
     );
 
-    if (rayResult.hasHit) {
+    if (rayResult.hasHit && this.cameraCollisionOn) {
       this.cameraContainer.position.setFromSphericalCoords(
         rayResult.distance - 0.1,
         this.spherical.phi,
@@ -149,7 +150,7 @@ class ThirdPersonCameraControls {
       Math.min(this.maxDistance, this.spherical.radius)
     );
 
-    // copy maths to actual three.js camere
+    // copy maths to actual three.js camera
     this.camera.position.copy(this.getCameraPosition(rayResult));
     this.camera.lookAt(this.getCameraLookVec());
   }
@@ -200,7 +201,7 @@ class ThirdPersonCameraControls {
       this.rotateEnd.y += event.movementY * 0.25 * 0.8;
     } else {
       this.domElement.requestPointerLock();
-      this.domElement.style.cursor = "none";
+      this.domElement.style.cursor = 'none';
       this.rotateEnd.set(event.clientX, event.clientY);
     }
     this.handleApplyRotate();
@@ -300,7 +301,7 @@ class ThirdPersonCameraControls {
     }
 
     this.addPointer(event);
-    if (event.pointerType === "touch") {
+    if (event.pointerType === 'touch') {
       this.onTouchStart(event);
     } else {
       this.onMouseDown(event);
@@ -317,7 +318,7 @@ class ThirdPersonCameraControls {
       return;
     }
 
-    if (event.pointerType === "touch") {
+    if (event.pointerType === 'touch') {
       this.onTouchMove(event);
     } else {
       this.onMouseMove(event);
@@ -325,7 +326,7 @@ class ThirdPersonCameraControls {
   }
 
   onPointerUp(event) {
-    if (event.pointerType === "touch") {
+    if (event.pointerType === 'touch') {
       this.onTouchEnd();
     } else {
       this.onMouseUp();
@@ -335,7 +336,7 @@ class ThirdPersonCameraControls {
 
     if (
       this.cameraState.pointers.length === 0 &&
-      event.pointerType === "touch"
+      event.pointerType === 'touch'
     ) {
       this.domElement.releasePointerCapture(event.pointerId);
     }
@@ -443,7 +444,7 @@ class ThirdPersonCameraControls {
   }
 
   onMouseUp() {
-    this.domElement.style.cursor = "initial";
+    this.domElement.style.cursor = 'initial';
     document.exitPointerLock();
     this.input.isMouseLooking = false;
   }
@@ -507,7 +508,7 @@ class ThirdPersonCameraControls {
 
   reset() {
     this.cameraState.reset();
-    this.domElement.style.cursor = "initial";
+    this.domElement.style.cursor = 'initial';
     try {
       document.exitPointerLock();
     } catch (e) {

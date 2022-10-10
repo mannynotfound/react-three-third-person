@@ -1,31 +1,31 @@
-import { useRaycastClosest } from "@react-three/cannon";
-import { useState, useEffect } from "react";
+import { useRaycastClosest } from '@react-three/cannon';
+import { useState, useEffect } from 'react';
 
 const getAnimationFromUserInputs = (inputs) => {
   const { up, down, right, left, isMouseLooking } = inputs;
 
   if (up && !down) {
-    return "run";
+    return 'run';
   }
 
   if (down && !up) {
-    return "backpedal";
+    return 'backpedal';
   }
 
   if (!right && left) {
-    return isMouseLooking ? "strafeLeft" : "turnLeft";
+    return isMouseLooking ? 'strafeLeft' : 'turnLeft';
   }
 
   if (!left && right) {
-    return isMouseLooking ? "strafeRight" : "turnRight";
+    return isMouseLooking ? 'strafeRight' : 'turnRight';
   }
 
-  return "idle";
+  return 'idle';
 };
 
 export default function useCharacterState(inputs = {}, position, mixer) {
   const [characterState, setCharacterState] = useState({
-    animation: "idle",
+    animation: 'idle',
     isJumping: false,
     inAir: false,
     isMoving: false,
@@ -51,7 +51,7 @@ export default function useCharacterState(inputs = {}, position, mixer) {
       skipBackfaces: true,
     },
     (e) => {
-      if (e.hasHit && inAir) {
+      if (e.hasHit && !landed) {
         setLanded(true);
       }
     },
@@ -63,7 +63,7 @@ export default function useCharacterState(inputs = {}, position, mixer) {
       setCharacterState((prevState) => ({
         ...prevState,
         inAir: false,
-        animation: "landing",
+        animation: 'landing',
         isLanding: true,
       }));
     }
@@ -85,12 +85,12 @@ export default function useCharacterState(inputs = {}, position, mixer) {
     };
 
     if (jump && !jumpPressed) {
-      newState.animation = "jump";
+      newState.animation = 'jump';
       newState.isJumping = true;
     }
 
     // let landing animation playout if we're still landing
-    if (isLanding && newState.animation === "idle") {
+    if (isLanding && newState.animation === 'idle') {
       return;
     }
 
@@ -107,7 +107,7 @@ export default function useCharacterState(inputs = {}, position, mixer) {
         ...prevState,
         isJumping: false,
         inAir: true,
-        animation: "inAir",
+        animation: 'inAir',
       }));
     };
     if (characterState.isJumping) {
@@ -129,14 +129,14 @@ export default function useCharacterState(inputs = {}, position, mixer) {
         isJumping: false,
         inAir: false,
         isLanding: false,
-        animation: "idle",
+        animation: 'idle',
       }));
     };
 
-    mixer.addEventListener("finished", onMixerFinish);
+    mixer.addEventListener('finished', onMixerFinish);
 
     return () => {
-      mixer.removeEventListener("finished", onMixerFinish);
+      mixer.removeEventListener('finished', onMixerFinish);
     };
   }, [mixer]);
 

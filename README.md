@@ -39,6 +39,11 @@ const animationPaths = {
 
 function ThirdPersonCharacter() {
   const characterObj = useGLTF(`${PATH}/your_model.glb`);
+  const characterProps = {
+    scale: 1.75,
+    velocity: 8,
+    radius: 0.5,
+  };
 
   return (
     <ThirdPersonCharacterControls
@@ -49,6 +54,7 @@ function ThirdPersonCharacter() {
         collisionFilterMask: 2,
       }}
       characterObj={characterObj}
+      characterProps={characterProps}
       animationPaths={animationPaths}
     />
   );
@@ -60,6 +66,7 @@ function ThirdPersonCharacter() {
 | Prop           | Type           | Default   | Description                                       |
 | -------------- | -------------- | --------- | ------------------------------------------------- |
 | cameraOptions  | object         | {}        | configuration object for control's camera options |
+| characterProps  | object         | {}        | configuration object for character |
 | characterObj   | THREE.Object3D | undefined | three.js object for character model               |
 | animationPaths | object         | {}        | object for animation clip configuration           |
 
@@ -71,6 +78,15 @@ function ThirdPersonCharacter() {
 | minDistance         | float   | 0.6     | maximum zoom in capability of camera                                 |
 | maxDistance         | float   | 7       | maximum zoom out capability of camera                                |
 | collisionFilterMask | integer | 2       | the cannon.js group given to "world" objects for collision detection |
+| cameraCollisionOn | boolean | off       | if turned on, will use colllisionFilterMask to add collision to the camera (experimental and unoptimized) |
+
+#### characterProps
+
+| Prop                | Type    | Default | Description                                                          |
+| ------------------- | ------- | ------- | -------------------------------------------------------------------- |
+| scale             | float   | 1     | amount to scale the character model        |
+| radius         | float   | 0.3     | value used for creating character capsule collider                                |
+| velocity         | float   | 4       | speed at which character moves                                |
 
 #### characterObj
 

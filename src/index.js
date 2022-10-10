@@ -1,6 +1,6 @@
-import React, { Suspense, useEffect, useRef, useState } from "react";
-import * as THREE from "three";
-import { useFrame, useThree } from "@react-three/fiber";
+import { Suspense, useEffect, useRef, useState } from 'react';
+import * as THREE from 'three';
+import { useFrame, useThree } from '@react-three/fiber';
 import {
   useThirdPersonAnimations,
   useThirdPersonCameraControls,
@@ -10,19 +10,21 @@ import {
   useCharacterState,
   useCapsuleCollider,
   useRay,
-} from "./hooks";
+} from './hooks';
 
 const ThirdPersonCharacterControls = ({
   cameraOptions = {},
   characterObj,
+  characterProps = {},
   animationPaths = {},
+  onLoad,
 }) => {
   const {
     camera,
     gl: { domElement },
   } = useThree();
   // set up refs that influence character and camera position
-  const collider = useCapsuleCollider();
+  const collider = useCapsuleCollider(characterProps.radius);
   const [position, setPosition] = useState([0, 0, 0]);
   const modelRef = useRef();
   const cameraContainer = useRef(new THREE.Object3D());
@@ -42,11 +44,13 @@ const ThirdPersonCharacterControls = ({
   });
   const { actions, mixer } = useThirdPersonAnimations(
     characterObj,
-    animationPaths
+    animationPaths,
+    onLoad
   );
   const { animation, isMoving } = useCharacterState(inputs, position, mixer);
 
   // subscribe to collider velocity/position changes
+  const charVelocity = characterProps.velocity ?? 4;
   const velocity = useRef([0, 0, 0]);
   useEffect(() => {
     collider.velocity.subscribe((v) => {
@@ -79,7 +83,7 @@ const ThirdPersonCharacterControls = ({
       movement.applyMatrix4(mtx);
 
       // then apply velocity to collider influenced by model groups rotation
-      const baseVelocity = inputs.down ? 2 : 4;
+      const baseVelocity = inputs.down ? charVelocity / 2 : charVelocity;
       xVelocity = movement.x * baseVelocity;
       zVelocity = movement.z * baseVelocity;
     }
@@ -88,7 +92,7 @@ const ThirdPersonCharacterControls = ({
 
     // after applying x/z velocity, apply y velocity if user has jumped while grounded
     const isGrounded = Math.abs(velocity.current[1].toFixed(2)) === 0;
-    if (animation === "jump" && isGrounded) {
+    if (animation === 'jump' && isGrounded) {
       collider.velocity.set(velocity.current[0], 8, velocity.current[2]);
     }
 
@@ -112,7 +116,7 @@ const ThirdPersonCharacterControls = ({
   }, [animation, actions]);
 
   return (
-    <group ref={modelRef} rotation={[0, Math.PI, 0]}>
+    <group ref={modelRef} rotation={[0, Math.PI, 0]} {...characterProps}>
       <Suspense fallback={() => null}>
         <primitive object={characterObj} dispose={null} />
       </Suspense>
